@@ -24,7 +24,7 @@ plt.title('Boxplot: Esperanza de Vida Saludable')
 plt.xlabel('Esperanza de Vida Saludable')
 plt.show()
 
-factors = ['GDP per capita', 'Social support', 'Healthy life expectancy', 'Freedom to make life choices', 'Generosity', 'Perceptions of corruption']
+Factores = ['GDP per capita', 'Social support', 'Healthy life expectancy', 'Freedom to make life choices', 'Generosity', 'Perceptions of corruption']
 values = Mexico[factors].values.flatten()
 plt.figure(figsize=(10, 8))
 plt.pie(values, labels=factors, autopct='%1.1f%%', startangle=140, colors=plt.cm.Paired.colors)
@@ -36,7 +36,6 @@ Pais_mas_feliz = happiness.iloc[happiness['Score'].idxmax()]['Country or region'
 Pais_infeliz = happiness.iloc[happiness['Score'].idxmin()]['Country or region']
 Paises_filtrados = ['Mexico', 'Canada', 'Germany', Pais_mas_feliz, Pais_infeliz]
 Paises_seleccion = happiness[happiness['Country or region'].isin(Paises_filtrados)]
-factors = ['GDP per capita', 'Social support', 'Healthy life expectancy', 'Freedom to make life choices', 'Generosity', 'Perceptions of corruption']
 Paises_seleccion.set_index('Country or region', inplace=True)
 Factores = Paises_seleccion[['GDP per capita', 'Social support', 'Healthy life expectancy', 'Freedom to make life choices', 'Generosity', 'Perceptions of corruption']]
 Factores.plot(kind='bar', figsize=(14, 8))
