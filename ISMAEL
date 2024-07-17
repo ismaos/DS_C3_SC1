@@ -1,0 +1,75 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from google.colab import files
+uploaded = files.upload()
+happiness = pd.read_csv('Happiness_report.csv')
+
+Mexico = happiness[happiness['Country or region'] == 'Mexico'].set_index('Country or region')
+
+plt.figure(figsize=(10, 6))
+n, bins, patches = plt.hist(happiness['Score'], bins=20, edgecolor='black')
+Mexico_score = Mexico['Score'].values[0]
+max_frec = n.max()
+plt.text(Mexico_score, max_frec, 'Mexico', fontsize=12, weight='bold', color='red', ha='center')
+plt.title('Histograma del Puntaje de Felicidad')
+plt.xlabel('Puntaje')
+plt.ylabel('Frecuencia')
+plt.show()
+
+plt.figure(figsize=(10, 6))
+boxplot = plt.boxplot(happiness['Healthy life expectancy'].dropna(), vert=False, patch_artist=True)
+Esperanza_vida = Mexico['Healthy life expectancy'].values[0]
+plt.text(Esperanza_vida, 1.1, 'Mexico', fontsize=12, weight='bold', color='red', ha='center')
+plt.title('Boxplot: Esperanza de Vida Saludable')
+plt.xlabel('Esperanza de Vida Saludable')
+plt.show()
+
+factors = ['GDP per capita', 'Social support', 'Healthy life expectancy', 'Freedom to make life choices', 'Generosity', 'Perceptions of corruption']
+values = Mexico[factors].values.flatten()
+plt.figure(figsize=(10, 8))
+plt.pie(values, labels=factors, autopct='%1.1f%%', startangle=140, colors=plt.cm.Paired.colors)
+plt.title('Contribución de Factores a la Felicidad en México')
+plt.axis('equal')
+plt.show()
+
+Pais_mas_feliz = happiness.iloc[happiness['Score'].idxmax()]['Country or region']
+Pais_infeliz = happiness.iloc[happiness['Score'].idxmin()]['Country or region']
+Paises_filtrados = ['Mexico', 'Canada', 'Germany', Pais_mas_feliz, Pais_infeliz]
+Paises_seleccion = happiness[happiness['Country or region'].isin(Paises_filtrados)]
+factors = ['GDP per capita', 'Social support', 'Healthy life expectancy', 'Freedom to make life choices', 'Generosity', 'Perceptions of corruption']
+Paises_seleccion.set_index('Country or region', inplace=True)
+Factores = Paises_seleccion[['GDP per capita', 'Social support', 'Healthy life expectancy', 'Freedom to make life choices', 'Generosity', 'Perceptions of corruption']]
+Factores.plot(kind='bar', figsize=(14, 8))
+plt.title('Comparación de Factores de Felicidad en 5 Países')
+plt.xlabel('País')
+plt.ylabel('Valor del Factor')
+plt.show()
+
+import seaborn as sns
+factores = ['GDP per capita', 'Social support', 'Healthy life expectancy', 'Freedom to make life choices', 'Generosity', 'Perceptions of corruption']
+plt.figure(figsize=(18, 12))
+for i, factor in enumerate(factores, 1):
+    plt.subplot(2, 3, i)
+    plt.scatter(happiness[factor], happiness['Score'])
+    plt.title(f'Score vs {factor}')
+    plt.xlabel(factor)
+    plt.ylabel('Score')
+
+plt.tight_layout()
+plt.show()
+MCorrelacion = happiness[['Score'] + factors].corr()
+plt.figure(figsize=(10, 8))
+sns.heatmap(MCorrelacion, annot=True, cmap='coolwarm', center=0)
+plt.title('Heatmap de Correlación')
+plt.show()
+
+uploaded = files.upload()
+metadata = pd.read_csv('Metadata.csv')
+Datos_Pais_region = pd.merge(happiness, metadata, left_on='Country or region', right_on='TableName')
+Promedio_region = Datos_Pais_region.groupby('Region')['Score'].mean().reset_index()
+plt.barh(Promedio_region['Region'], Promedio_region['Score'], color='skyblue')
+plt.xlabel('Nivel de felicidad')
+plt.ylabel('Region')
+plt.title('Promedio de felicidad por region')
+plt.grid(axis='x')
+plt.show()
