@@ -45,9 +45,9 @@ plt.ylabel('Valor del Factor')
 plt.show()
 
 import seaborn as sns
-factores = ['GDP per capita', 'Social support', 'Healthy life expectancy', 'Freedom to make life choices', 'Generosity', 'Perceptions of corruption']
+Factores = ['GDP per capita', 'Social support', 'Healthy life expectancy', 'Freedom to make life choices', 'Generosity', 'Perceptions of corruption']
 plt.figure(figsize=(18, 12))
-for i, factor in enumerate(factores, 1):
+for i, factor in enumerate(Factores, 1):
     plt.subplot(2, 3, i)
     plt.scatter(happiness[factor], happiness['Score'])
     plt.title(f'Score vs {factor}')
